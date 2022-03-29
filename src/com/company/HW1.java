@@ -27,13 +27,15 @@ public class HW1 {
 		return true;
     }
  
-    public static void main(String[] args) {   	
+    public static void main(String[] args) {
 
+
+		System.out.println("HIHIHI");
 		System.out.println("test");
     	decode_password("2[b]c"); // expected output: bbc
     	decode_password("1[a]2[b]"); // expected output: abb
     	decode_password("1[a2[b]"); // expected output: invalid password format
-    	decode_password("3[kk2323]"); // expected output: invalid password format
+    	decode_password("3[kk2323]"); // expected output: invalid password   format
     	decode_password("b2[an]a"); // expected output: banana
     	decode_password("10[bd]2[an]2[sg]"); // expected output: bdbdbdbdbdbdbdbdbdbdanansgsg
     	decode_password("go2[d]e3[s]ip"); // expected output: goddesssip
