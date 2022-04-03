@@ -18,7 +18,6 @@ public class HW1 {
     
     // todo: write your code in this function
     private static void decode_password(String s) {
-
 		//程式起點
     	if (!validation(s)) {
     		System.out.println("invalid password format");
@@ -63,7 +62,6 @@ public class HW1 {
     private static boolean validation(String s) {
 		//stack用來判斷成對括弧
 		Stack stack = new Stack();
-
 		//驗證輸入字串是否合法
 		for (int i=0 ; i < s.length() ; i++){
 			//如果連續數字後，緊接的不是'['，不合法
@@ -71,44 +69,42 @@ public class HW1 {
 				while (Character.isDigit(s.charAt(i))){
 					i++;
 				}
-				if (s.charAt(i) !='[') return false;
+				if (s.charAt(i) !='[') {
+					return false;
+				}
+				i--;
+
 			}else if(s.charAt(i)== '['){
 				//將 '[' push入stack，之後讓遍歷字串的i++
-				stack.push(s.charAt(i++));
-
+				stack.push(s.charAt(i));
+				i++;
 				//如果括號裡面有除了正常行為外的數字，不合法
 				while (s.charAt(i) != ']'){
-
 					if (Character.isDigit(s.charAt(i))){
 						while (Character.isDigit(s.charAt(i))){
 							i++;
 						}
-						if (s.charAt(i) !='[') return false;
-						else {
+						if (s.charAt(i) !='[') {
+							return false;
+						}else if (s.charAt(i) == '['){
 							stack.push(s.charAt(i));
+							i--;
 						}
-					i++;
 					}
+					i++;
 				}
-				stack.pop();	//將成對括弧pop掉
+				//pop掉成對括弧
+				stack.pop();
 			}
 		}
-		if(!stack.empty()) return false;
+		//如果stack不為空，則代表括弧沒有成對
+		if(!stack.empty()) {
+			return false;
+		}
 		return true;
     }
  
     public static void main(String[] args) {
-
-/*		//測試Stack
-		Stack stack = new Stack();
-		stack.push("s");
-		stack.push(10);
-		System.out.println(stack.peek().getClass());
-		stack.pop().getClass();
-		System.out.println("print stack" + stack);
-		if (stack.empty())	System.out.println("true");
-*/
-
     	decode_password("2[b]c"); // expected output: bbc
 		decode_password("1[a]2[b]"); // expected output: abb
     	decode_password("1[a2[b]"); // expected output: invalid password format
@@ -116,7 +112,7 @@ public class HW1 {
     	decode_password("b2[an]a"); // expected output: banana
     	decode_password("10[bd]2[an]2[sg]"); // expected output: bdbdbdbdbdbdbdbdbdbdanansgsg
     	decode_password("go2[d]e3[s]ip"); // expected output: goddesssip
-//        decode_password("2[effp]10[ac2[zn]]"); // expected output: effpeffpacznznacznznacznznacznznacznznacznznacznznacznznacznznacznzn
+		decode_password("2[effp]10[ac2[zn]]"); // expected output: effpeffpacznznacznznacznznacznznacznznacznznacznznacznznacznznacznzn
 
     }
 }
