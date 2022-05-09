@@ -1,4 +1,5 @@
-// todo: student 1 id & name, student 2 id & name
+package com.company;
+// todo: student 1 id M104020026 & 陳亭椰, student 2 id M104020052 & 張孫杰
 // todo: Write an algorithm in the findKeyInsertionSequence function 
 // that returns an insertion sequence of indices that will reduce the height of the tree. 
 // DO NOT EDIT other functions NOR add global variables.
@@ -422,7 +423,7 @@ public class BST1<Key extends Comparable<Key>, Value> {
     	index = 0;
     	String[] store = new String[size(root)];
     	keysInorder(root, store);
-    	
+
     	// empty tree
     	root.key = (Key) store[store.length/2];
     	root.left = null;
@@ -438,10 +439,30 @@ public class BST1<Key extends Comparable<Key>, Value> {
     // todo: write your code in this function
     // returns a sequences of indices from the ordered keys that can be used to create a new binary search tree
     private int[] findKeyInsertionSequence() {
-    	int[] sequence = new int[size(root)];
-    	
-    	// todo: write your code here
-    	
+        int[] sequence = new int[size(root)]; //{0,~,9}
+        //int[] sequence = {5,1,2,3,4,0,6,7,8,9};
+
+        for (int i =0;i<sequence.length; i++ ){
+            sequence[i] = i;
+        }
+
+        //因為要使BST平衡，所以index[1/2]、index[1/4]、index[3/4]，首先更改這三個次序
+        int mid = sequence.length/2; //5
+        int qua1 = sequence.length/4; //2.5 ->2
+        int qua3 = sequence.length/4 +mid ;// 7
+        int temp ;
+
+        sequence[0] = mid; // 5 <-> index 0
+        sequence[mid] = 0;
+
+        sequence[1] = qua1;  // 2 <-> index 1
+        sequence[qua1] = 1;
+
+        //因為調換次序會出現衝突，故用temp的方式處理
+        temp = sequence[qua3];
+        sequence[qua3] = sequence [2];
+        sequence [2]= temp;
+
     	return sequence;
     }
     
