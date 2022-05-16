@@ -1,5 +1,5 @@
-package com.company;
 
+//M104020052 張孫杰 M104020026 陳亭椰
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -122,8 +122,31 @@ public class LinearProbingHashST1<Key, Value> {
         n++;
     }
 
-    // Write your code here
+    // Write your code her
+    // We use Quadratic and Double hash to do this.
     public void put2(Key key, Value val) {
+        if (key == null) throw new IllegalArgumentException("first argument to put() is null");
+
+        if (val == null) {
+            delete(key);
+            return;
+        }
+
+        int i;
+        int collisionCount = 0;
+        for (i = hash(key); keys[i] != null; i = (i + hashTextbook(key) + collisionCount^collisionCount) % m) {
+            if (keys[i].equals(key)) {
+                vals[i] = val;
+                return;
+            }
+            collisionCount++;
+        }
+
+        totalCollisions += collisionCount;
+
+        keys[i] = key;
+        vals[i] = val;
+        n++;
 
     }
 
@@ -144,8 +167,14 @@ public class LinearProbingHashST1<Key, Value> {
 
     // Write your code here
     public Value get2(Key key) {
+    	int collisionCount = 0;
+        if (key == null) throw new IllegalArgumentException("argument to get() is null");
+        for (int i = hash(key); keys[i] != null; i = (i + hashTextbook(key) + collisionCount^collisionCount) % m) {
+            if (keys[i].equals(key))
+                return vals[i];
+        	collisionCount++;
+        }
         return null;
-
     }
 
     /**
@@ -403,8 +432,8 @@ public class LinearProbingHashST1<Key, Value> {
         System.out.println("A553 " + st.get2("A553"));
         System.out.println("A900 " + st.get2("A900"));
         System.out.println("A1500 " + st.get2("A1500"));
-        System.out.println("NSYSU " + st.get("NSYSU"));
-        System.out.println("ITR " + st.get("ITR"));
+        System.out.println("NSYSU " + st.get2("NSYSU"));
+        System.out.println("ITR " + st.get2("ITR"));
 
         System.out.println();
         showImprovement(collisions1,collisions2);
