@@ -4,17 +4,13 @@ package com.company;
 //todo: write code in the decode_password(String s) function and validation(String s) to decode password as shown in the expected output.
 //DO NOT EDIT other functions NOR add global variables.
 
-import com.sun.source.tree.NewArrayTree;
-
 import java.util.*;
-import java.util.stream.Collectors;
-import java.lang.StringBuilder;
-import java.lang.Math; 
+import java.lang.Math;
 
-public class HW1 {
+public class M104020052_HW1 {
 		
     // This class should not be instantiated.
-    private HW1() { }
+    private M104020052_HW1() { }
     
     // todo: write your code in this function
     private static void decode_password(String s) {
