@@ -1,4 +1,6 @@
-// todo: student 1 id & name, student 2 id & name
+package com.company;
+
+// todo: M104020052 張孫杰
 // todo: Complete the function nodeToRemoveToSplitInto3Components that can split the calling
 // undirected graph into three connected components and return the node to remove. 
 // DO NOT EDIT other functions NOR add global variables.
@@ -126,7 +128,33 @@ public class Graph1 {
     // Returns one node that can be removed to break the graph into 3 components
     public int nodeToRemoveToSplitInto3Components() {
         // write your code here
-        
+        // 複製一個G2的圖
+        Graph1 G2 = new Graph1(V);
+        for (int v = 0; v < V; v++) {
+            for (int w : adj[v]) {
+                G2.addEdge(v, w);
+            }
+        }
+        // 為了找出3個connected component，把G2的每個點都試著移除一次(remove edge)，如果找到就return v，沒有找到就復原該點(add edge)
+        for (int v = 0; v < G2.V; v++){
+            for (int w : G2.adj[v]) {
+                validateVertex(v);
+                validateVertex(w);
+                G2.E--;
+                G2.adj[v].remove(w);
+                G2.adj[w].remove(v);
+            }
+            //System.out.println(G2);
+            if(new ConnectedComponent(G2,v).count-1==3){    //若我們把該點的connected edge刪掉，該點也還會留在圖上，所以會造成connected component多一個的情況，這裡幫他-1，就會得到正確數量的connected component
+                //System.out.println(new ConnectedComponent(G2,v).count);
+                return v;
+            }else {
+                //假若移除該點後沒有找到3個connected component，就把該點復原，加回去
+                for (int w : adj[v]) {
+                    G2.addEdge(v, w);
+                }
+            }
+        }
         // no node removal can break the graph into 3 components
         return -1;
     }
