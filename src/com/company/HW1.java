@@ -7,10 +7,10 @@ package com.company;
 import java.util.*;
 import java.lang.Math;
 
-public class M104020052_HW1 {
+public class HW1 {
 		
     // This class should not be instantiated.
-    private M104020052_HW1() { }
+    private HW1() { }
     
     // todo: write your code in this function
     private static void decode_password(String s) {
