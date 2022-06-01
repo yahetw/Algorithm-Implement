@@ -9,7 +9,55 @@ import java.util.Random;
 public class HW2 {
     
   private HW2() {}
-  
+
+  public static class Heap{
+    private Heap() { }
+
+    public static void sort(Course[] pq) {
+      int n = pq.length;
+
+      // heapify phase
+      for (int k = n/2; k >= 1; k--)
+        sink(pq, k, n);
+
+      // sortdown phase
+      // write your code here
+      int k = n;
+
+      while(n > 1) {
+        exch(pq, 1, n--);  // 最大的跟最後面換
+        if (less(pq, 2, 3)) {  //如果左子樹比較小
+          exch(pq, 1, 3);  //將右子樹交換到root
+          sink(pq, 3, n);  //將右子樹sink
+        }
+        else {
+          exch(pq, 1, 2);  //相反
+          sink(pq, 2, n);
+        }
+      }
+    }
+
+    private static void sink(Course[] pq, int k, int n) {
+      while (2*k <= n) {
+        int j = 2*k;
+        if (j < n && less(pq, j, j+1)) j++;
+        if (!less(pq, k, j)) break;
+        exch(pq, k, j);
+        k = j;
+      }
+    }
+
+    private static boolean less(Course[] pq, int i, int j) {
+      return pq[i-1].compareTo(pq[j-1]) < 0;
+    }
+
+    private static void exch(Object[] pq, int i, int j) {
+      Object swap = pq[i-1];
+      pq[i-1] = pq[j-1];
+      pq[j-1] = swap;
+    }
+  }
+
   public static class Course{
     int id = 0; // course's id. ITR->1, MIS->2, DataBase->3, ResearchMethod->4
     String name; // course's name

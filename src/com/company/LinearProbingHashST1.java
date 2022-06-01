@@ -1,9 +1,9 @@
 package com.company;
-//M104020052 張孫杰 M104020026 陳亭椰
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-// todo: student 1 id & name, student 2 id & name
+// todo: M104020052 張孫杰, M104020026 陳亭椰
 // todo: Please implement the put2 and get2 functions that can reduce the amount of collisions
 // by at least 30%.
 // In your put2 function, you need to add 1 to the totalCollisions whenever you encounter a
