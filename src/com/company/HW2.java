@@ -1,10 +1,10 @@
-
+package com.company;
 //TODO: M104020052 張孫杰
 //TODO: This assignment aims to write a function simulate to allocate the course process by student’s preference.
+import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
 
 public class HW2 {
     
@@ -27,7 +27,7 @@ public class HW2 {
   public static class Student{
     int year; // Student's year. freshman->1, sophomore->2, junior->3, senior ->4
     int id; // Unique student id
-        //A set of student's preferences of courses id. e.g. [4,3,2,1]. The first priority of course is 4, which means ResearchMethod
+    //A set of student's preferences of courses id. e.g. [4,3,2,1]. The first priority of course is 4, which means ResearchMethod
     int[] preference;
     
     // Student should initial by year, id ,and candidate_courses.
@@ -114,6 +114,40 @@ public class HW2 {
   // TODO: write your code in this function
   // Simulate courses allocating process
   private static Course[] simulate(Student[] students, Course[] courses) {
+
+//    for(Course course:courses) {
+//      System.out.println(course.name+" : ");
+////      System.out.println(Arrays.toString(course.candidate));
+//
+//    }
+
+    // 依照年級進行switch case，大的年級優先
+
+    // 應該先看志願序，如果志願相同，比年級，再比student id
+    // 假如年級相同，會先比student id
+    for(Student student: students){
+      switch (student.year){
+        case 1:
+          break;
+        case 2:
+          break;
+        case 3:
+          break;
+        case 4:
+
+          break;
+      }
+    }
+
+    Student[] assign_students = new Student[3];
+    assign_students[0] = students[0];
+    assign_students[1] = students[1];
+
+    courses[0].candidate =assign_students;
+
+    System.out.println(students[0].id);
+
+
     return courses;
   }
   
