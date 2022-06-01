@@ -167,13 +167,12 @@ public class HW2 {
   // It is normal that the function is no code.
   private static void test3() {
   }
-  
+
   // TODO: write your code in this function
   // Simulate courses allocating process
   private static Course[] simulate(Student[] students, Course[] courses) {
 
     // 2階段排序Comparator 參考自 : https://blog.csdn.net/HD243608836/article/details/102535299
-
     PriorityQueue<Student> maxHeap = new PriorityQueue<Student>(new Comparator<Student>() {
       @Override
       public int compare(Student o1, Student o2) {
@@ -188,49 +187,77 @@ public class HW2 {
 
     // 新增所有students物件到maxHeap中，新增完後maxHeap中的物件會是已排序好的狀態
     maxHeap.addAll(List.of(students));
-
+    Queue<Student> queue_not_my_preference = new LinkedList<>();  // 用來處理志願序不為i的情況，其他人次序往後
+    Queue<Student> queue_all_fine = new LinkedList<>(); // 用來處理志願序長度不一的情況，如{1}、{1,2}
 
     //因課程編號不會跳號，所以從id為1的課程開始選課
     for(int i=1;i<= courses.length;i++ ){
       //排序好後，課程編號為1的先分發，即挑選課程志願序為1的人往前排，其他人次序往後
       Student[] students_course_selected = new Student[courses[i-1].candidate.length];  //建立一個專屬課程編號i的待選上的學生排序清單
-      Queue<Student> queue_not_my_preference = new LinkedList<>();  // 用來處理志願序不為i的情況，其他人次序往後
-      Queue<Student> queue_all_fine = new LinkedList<>(); // 用來處理志願序長度不一的情況，如{1}、{1,2}
 
       int stu_length =0;  //已選上的人數
 
       // 依照志願進行選課
-      for (int j=0; j< students.length;j++){
-        if (stu_length ==students_course_selected.length) break;
+        int count = 0;
+        while(count < courses[i-1].candidate.length){
+          System.out.print(count++ +" ");
+          if (stu_length ==students_course_selected.length) break;
+          // 如果該名學生的志願序有寫滿
+          if (maxHeap.peek().preference.length == courses.length){
+            if (maxHeap.peek().preference[0]==i){
+              // 第一個志願的為
+              students_course_selected[stu_length] = maxHeap.remove();
+              stu_length++;
+            }else {
+              queue_not_my_preference.offer(maxHeap.remove());
+            }
+          }else if (maxHeap.peek().preference.length==i-1){
+            queue_all_fine.offer(maxHeap.remove());
+          }else queue_not_my_preference.offer(maxHeap.remove());
+        }
+        courses[i-1].candidate =students_course_selected;
+        //如果課程人數沒滿，進入第二階段迴圈選課
 
+      // 非空志願序
+      while (!queue_not_my_preference.isEmpty() && stu_length !=students_course_selected.length){
+        students_course_selected[stu_length++] = queue_not_my_preference.poll();
+      }
+      // 空志願序
+      while (!queue_all_fine.isEmpty() && stu_length !=students_course_selected.length){
+        students_course_selected[stu_length++] = queue_all_fine.poll();
+      }
+      }
+    return courses;
+  }
+/*  private static void phase2(PriorityQueue maxHeap,Queue queue_not_my_preference,Course[] courses){
+    for(int i=1;i<= courses.length;i++ ){
+      //排序好後，課程編號為1的先分發，即挑選課程志願序為1的人往前排，其他人次序往後
+      Student[] students_course_selected = new Student[courses[i-1].candidate.length];  //建立一個專屬課程編號i的待選上的學生排序清單
+      Queue<Student> queue_not_my_preference = new LinkedList<>();  // 用來處理志願序不為i的情況，其他人次序往後
+      Queue<Student> queue_all_fine = new LinkedList<>(); // 用來處理志願序長度不一的情況，如{1}、{1,2}
+      int stu_length =0;  //已選上的人數
+
+      // 依照志願進行選課
+      int count = 0;
+      while(count < courses[i-1].candidate.length){
+        System.out.println(count++);
+        if (stu_length ==students_course_selected.length) break;
         // 如果該名學生的志願序有寫滿
         if (maxHeap.peek().preference.length == courses.length){
           if (maxHeap.peek().preference[0]==i){
             // 第一個志願的為
             students_course_selected[stu_length] = maxHeap.remove();
             stu_length++;
+          }else {
+            queue_not_my_preference.offer(maxHeap.remove());
           }
-        }else if (maxHeap.peek().preference.length==0){
+        }else if (maxHeap.peek().preference.length==i-1){
           queue_all_fine.offer(maxHeap.remove());
         }else queue_not_my_preference.offer(maxHeap.remove());
       }
-      // 空志願序擺前面
-      while (!queue_all_fine.isEmpty() && stu_length !=students_course_selected.length){
-        students_course_selected[stu_length++] = queue_all_fine.poll();
-      }
-      // 非空志願序擺後面
-      while (!queue_not_my_preference.isEmpty() && stu_length !=students_course_selected.length){
-        students_course_selected[stu_length++] = queue_not_my_preference.poll();
-      }
-      courses[i-1].candidate =students_course_selected;
+  }*/
 
 
-      //如果課程人數沒滿，進入第二階段迴圈選課
-    }
-
-    return courses;
-  }
-  
   // helper function
   // print result of allocating the student to course
   private static void print_course(Course[] courses) {
