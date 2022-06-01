@@ -52,12 +52,12 @@ public class HW2 {
 
     private static boolean less(Student[] pq, int i, int j) {
 
-      if (pq[i - 1].year > pq[j - 1].year)
-        return true;
-      else if (pq[i - 1].year == pq[j - 1].year){
-        return (pq[i-1].id-pq[j-1].id) <0;
-      }
-      return false;
+//      if (pq[i - 1].year > pq[j - 1].year)
+//        return true;
+//      else if (pq[i - 1].year == pq[j - 1].year){
+//        return (pq[i-1].id-pq[j-1].id) <0;
+//      }
+      return pq[i - 1].year > pq[j - 1].year;
     }
 
     private static void exch(Object[] pq, int i, int j) {
