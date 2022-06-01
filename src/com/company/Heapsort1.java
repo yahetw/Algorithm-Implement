@@ -61,9 +61,6 @@ public class Heapsort1 {
 	            h2_max_r= less(pq,2,3); // after we finish it, we need to compare it again
 	            //sink(pq, 1, k);
 	        }
-	     
-	        
-		
 	    }
 	    
 	   /***************************************************************************

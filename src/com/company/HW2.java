@@ -11,31 +11,34 @@ public class HW2 {
     private Heap() { }
 
      public static void sort(Student[] pq) {
-      int n = pq.length;
+       {
+         int n = pq.length;
 
-      // heapify phase
-      for (int k = n/2; k >= 1; k--)
-        sink(pq, k, n);
+         // heapify phase
+         for (int k = n / 2; k >= 1; k--)
+           sink(pq, k, n);
 
-      // sortdown phase
-      int k = n;
-      boolean h2_max_r= less(pq,2,3); // we save the maximum of height 2 in advance, so we don't need to compare it later.
-      while (k > 1) {
+         // sortdown phase
+         // write your code here
+         int k = n;
+         boolean h2_max_r = less(pq, 2, 3); // we save the maximum of height 2 in advance, so we don't need to compare it later.
+         while (k > 1) {
 
-        exch(pq, 1, k--);
-        if(h2_max_r) {
-          exch(pq,1,3);
+           exch(pq, 1, k--);
+           if (h2_max_r) {
+             exch(pq, 1, 3);
 
-          sink(pq,3,k);
-        }else {
-          exch(pq,1,2);
+             sink(pq, 3, k);
+           } else {
+             exch(pq, 1, 2);
 
-          sink(pq,2,k);
-        }
-        h2_max_r= less(pq,2,3); // after we finish it, we need to compare it again
-        //sink(pq, 1, k);
-      }
-    }
+             sink(pq, 2, k);
+           }
+           h2_max_r = less(pq, 2, 3); // after we finish it, we need to compare it again
+           //sink(pq, 1, k);
+         }
+       }
+     }
 
     private static void sink(Student[] pq, int k, int n) {
       while (2*k <= n) {
@@ -51,11 +54,10 @@ public class HW2 {
 
       if (pq[i - 1].year > pq[j - 1].year)
         return true;
-      else if (pq[i - 1].year < pq[j - 1].year)
-        return false;
-      else {
-        return Integer.compare(pq[i-1].id,pq[j-1].id) < 0;
+      else if (pq[i - 1].year == pq[j - 1].year){
+        return (pq[i-1].id-pq[j-1].id) <0;
       }
+      return false;
     }
 
     private static void exch(Object[] pq, int i, int j) {
