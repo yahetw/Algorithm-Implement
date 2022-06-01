@@ -41,16 +41,21 @@ public class HW2 {
       while (2*k <= n) {
         int j = 2*k;
         if (j < n && less(pq, j, j+1)) j++;
-        if (!less(pq, k, j)) break;
+        if (!(less(pq, k, j))) break;
         exch(pq, k, j);
         k = j;
       }
     }
 
     private static boolean less(Student[] pq, int i, int j) {
-      
 
-      return pq[i-1].year- (pq[j-1].year) > 0;
+      if (pq[i - 1].year > pq[j - 1].year)
+        return true;
+      else if (pq[i - 1].year < pq[j - 1].year)
+        return false;
+      else {
+        return Integer.compare(pq[i-1].id,pq[j-1].id) < 0;
+      }
     }
 
     private static void exch(Object[] pq, int i, int j) {
@@ -206,11 +211,11 @@ public class HW2 {
       }
       courses[i-1].candidate =assign_students;
 
-      int N = students.length;
-      for (int j= 0;j< assign_students.length; j++){
-        Heap.exch(students,1,N--);
-        Heap.sink(students,1,N);
-      }
+//      int N = students.length;
+//      for (int j= 0;j< assign_students.length; j++){
+//        Heap.exch(students,1,N--);
+//        Heap.sink(students,1,N);
+//      }
 
       //如果課程人數沒滿，進入第二階段迴圈選課
     }
