@@ -124,36 +124,36 @@ public class HW2 {
         return result;
       }
     });
-
     ArrayList<Student> students_arrlist = new ArrayList<Student>();
     students_arrlist.addAll(List.of(students));
     Stack<Student> stack = new Stack<>();
 
-    for (int i =0;i< courses.length;i++){
-      int counter = 0;  //已選上學生
-      for (int j=1;j<= courses.length;j++){
-
-        for (Student student:students_arrlist){
-          if (student.preference.length <=i){ //假如說我沒有填滿志願序的話，放到stack裡面
-            if (!stack.empty() && stack.peek().equals(student)) continue;
-            stack.push(student);
-          }else if(student.preference[i] == j){
-            maxHeap.add(student);
+    for (int j=1;j<= courses.length;j++){
+      for (int i =0;i< courses.length;i++){
+        int counter = 0;  //已選上學生
+        //開始選課
+          for (Student student:students_arrlist){
+            if (student.preference.length <=i){ //假如說我沒有填滿志願序的話，放到stack裡面
+              if (!stack.empty() && stack.peek().equals(student)) continue;
+              stack.push(student);
+            }else if(student.preference[i] == j){
+              maxHeap.add(student);
+            }
           }
-        }
-        students_arrlist.removeAll(stack);  //將stack內的student，從剩餘學生清單移除
+          students_arrlist.removeAll(stack);  //將stack內的student，從剩餘學生清單移除
 
-        while (counter != courses[i].candidate.length && !maxHeap.isEmpty()){
-          courses[i].candidate[counter] = maxHeap.peek();
-          students_arrlist.remove(maxHeap.remove());
-          counter++;
-        }
-        maxHeap.clear();
+          while (counter != courses[i].candidate.length && !maxHeap.isEmpty()){
+            courses[i].candidate[counter] = maxHeap.peek();
+            students_arrlist.remove(maxHeap.remove());
+            counter++;
+          }
       }
+      maxHeap.clear();
     }
     // students_arrlist剩下的都是不是他志願序的人
     maxHeap.addAll(students_arrlist);
 
+    //放入剩餘學生，跟stack中的學生
     for (int i =0;i< courses.length;i++){
       for (int j = 0;j<courses[i].candidate.length;j++){
         if (!maxHeap.isEmpty() && courses[i].candidate[j] == null) {
