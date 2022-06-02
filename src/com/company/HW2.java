@@ -200,7 +200,7 @@ public class HW2 {
       // 依照志願進行選課
         int count = 0;
         while(count < courses[i-1].candidate.length){
-          System.out.print(count++ +" ");
+          System.out.println(count++ );
           if (stu_length ==students_course_selected.length) break;
           // 如果該名學生的志願序有寫滿
           if (maxHeap.peek().preference.length == courses.length){
@@ -214,6 +214,7 @@ public class HW2 {
           }else if (maxHeap.peek().preference.length==i-1){
             queue_all_fine.offer(maxHeap.remove());
           }else queue_not_my_preference.offer(maxHeap.remove());
+
         }
         courses[i-1].candidate =students_course_selected;
         //如果課程人數沒滿，進入第二階段迴圈選課
