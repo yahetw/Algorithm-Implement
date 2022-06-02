@@ -7,67 +7,6 @@ public class HW2 {
     
   private HW2() {}
 
-/*
-  public class Heap {
-    private Heap() { }
-
-     public static void sort(Student[] pq) {
-       {
-         int n = pq.length;
-
-         // heapify phase
-         for (int k = n / 2; k >= 1; k--)
-           sink(pq, k, n);
-
-         // sortdown phase
-         // write your code here
-         int k = n;
-         boolean h2_max_r = less(pq, 2, 3); // we save the maximum of height 2 in advance, so we don't need to compare it later.
-         while (k > 1) {
-
-           exch(pq, 1, k--);
-           if (h2_max_r) {
-             exch(pq, 1, 3);
-
-             sink(pq, 3, k);
-           } else {
-             exch(pq, 1, 2);
-
-             sink(pq, 2, k);
-           }
-           h2_max_r = less(pq, 2, 3); // after we finish it, we need to compare it again
-           //sink(pq, 1, k);
-         }
-       }
-     }
-
-    private static void sink(Student[] pq, int k, int n) {
-      while (2*k <= n) {
-        int j = 2*k;
-        if (j < n && less(pq, j, j+1)) j++;
-        if (!(less(pq, k, j))) break;
-        exch(pq, k, j);
-        k = j;
-      }
-    }
-
-    private static boolean less(Student[] pq, int i, int j) {
-
-//      if (pq[i - 1].year > pq[j - 1].year)
-//        return true;
-//      else if (pq[i - 1].year == pq[j - 1].year){
-//        return (pq[i-1].id-pq[j-1].id) <0;
-//      }
-      return pq[i - 1].year > pq[j - 1].year;
-    }
-
-    private static void exch(Object[] pq, int i, int j) {
-      Object swap = pq[i-1];
-      pq[i-1] = pq[j-1];
-      pq[j-1] = swap;
-    }
-  }
-*/
   public static class Course{
     int id = 0; // course's id. ITR->1, MIS->2, DataBase->3, ResearchMethod->4
     String name; // course's name
@@ -166,13 +105,14 @@ public class HW2 {
   // Abstract test case 3. Prepare for hidden test case.
   // It is normal that the function is no code.
   private static void test3() {
+
   }
 
   // TODO: write your code in this function
   // Simulate courses allocating process
   private static Course[] simulate(Student[] students, Course[] courses) {
 
-    // 2階段排序Comparator 參考自 : https://blog.csdn.net/HD243608836/article/details/102535299
+    // 新增一個Heap，並使用2階段排序Comparator (year desc, id asc)
     PriorityQueue<Student> maxHeap = new PriorityQueue<Student>(new Comparator<Student>() {
       @Override
       public int compare(Student o1, Student o2) {
@@ -185,79 +125,48 @@ public class HW2 {
       }
     });
 
-    // 新增所有students物件到maxHeap中，新增完後maxHeap中的物件會是已排序好的狀態
-    maxHeap.addAll(List.of(students));
-    Queue<Student> queue_not_my_preference = new LinkedList<>();  // 用來處理志願序不為i的情況，其他人次序往後
-    Queue<Student> queue_all_fine = new LinkedList<>(); // 用來處理志願序長度不一的情況，如{1}、{1,2}
+    ArrayList<Student> students_arrlist = new ArrayList<Student>();
+    students_arrlist.addAll(List.of(students));
+    Stack<Student> stack = new Stack<>();
 
-    //因課程編號不會跳號，所以從id為1的課程開始選課
-    for(int i=1;i<= courses.length;i++ ){
-      //排序好後，課程編號為1的先分發，即挑選課程志願序為1的人往前排，其他人次序往後
-      Student[] students_course_selected = new Student[courses[i-1].candidate.length];  //建立一個專屬課程編號i的待選上的學生排序清單
+    for (int i =0;i< courses.length;i++){
+      int counter = 0;  //已選上學生
+      for (int j=1;j<= courses.length;j++){
 
-      int stu_length =0;  //已選上的人數
+        for (Student student:students_arrlist){
+          if (student.preference.length <=i){ //假如說我沒有填到這個志願序的話，放到stack裡面
+            if (!stack.empty() && stack.peek().equals(student)) continue;
+            stack.push(student);
+          }else if(student.preference[i] == j){
+            maxHeap.add(student);
+          }else {
 
-      // 依照志願進行選課
-        int count = 0;
-        while(count < courses[i-1].candidate.length){
-          System.out.println(count++ );
-          if (stu_length ==students_course_selected.length) break;
-          // 如果該名學生的志願序有寫滿
-          if (maxHeap.peek().preference.length == courses.length){
-            if (maxHeap.peek().preference[0]==i){
-              // 第一個志願的為
-              students_course_selected[stu_length] = maxHeap.remove();
-              stu_length++;
-            }else {
-              queue_not_my_preference.offer(maxHeap.remove());
-            }
-          }else if (maxHeap.peek().preference.length==i-1){
-            queue_all_fine.offer(maxHeap.remove());
-          }else queue_not_my_preference.offer(maxHeap.remove());
-
+          }
         }
-        courses[i-1].candidate =students_course_selected;
-        //如果課程人數沒滿，進入第二階段迴圈選課
+        students_arrlist.removeAll(stack);  //將stack內的student，從剩餘學生清單移除
 
-      // 非空志願序
-      while (!queue_not_my_preference.isEmpty() && stu_length !=students_course_selected.length){
-        students_course_selected[stu_length++] = queue_not_my_preference.poll();
+        while (counter != courses[i].candidate.length && !maxHeap.isEmpty()){
+          courses[i].candidate[counter] = maxHeap.peek();
+          students_arrlist.remove(maxHeap.remove());
+          counter++;
+        }
+        maxHeap.clear();
       }
-      // 空志願序
-      while (!queue_all_fine.isEmpty() && stu_length !=students_course_selected.length){
-        students_course_selected[stu_length++] = queue_all_fine.poll();
+    }
+    // students_arrlist剩下的都是不是他志願序的人
+    maxHeap.addAll(students_arrlist);
+
+    for (int i =0;i< courses.length;i++){
+      for (int j = 0;j<courses[i].candidate.length;j++){
+        if (!maxHeap.isEmpty() && courses[i].candidate[j] == null) {
+          courses[i].candidate[j] = maxHeap.remove();
+        }else if (!stack.empty() && courses[i].candidate[j] == null){
+          courses[i].candidate[j] = stack.pop();
+        }
       }
-      }
+    }
     return courses;
   }
-/*  private static void phase2(PriorityQueue maxHeap,Queue queue_not_my_preference,Course[] courses){
-    for(int i=1;i<= courses.length;i++ ){
-      //排序好後，課程編號為1的先分發，即挑選課程志願序為1的人往前排，其他人次序往後
-      Student[] students_course_selected = new Student[courses[i-1].candidate.length];  //建立一個專屬課程編號i的待選上的學生排序清單
-      Queue<Student> queue_not_my_preference = new LinkedList<>();  // 用來處理志願序不為i的情況，其他人次序往後
-      Queue<Student> queue_all_fine = new LinkedList<>(); // 用來處理志願序長度不一的情況，如{1}、{1,2}
-      int stu_length =0;  //已選上的人數
-
-      // 依照志願進行選課
-      int count = 0;
-      while(count < courses[i-1].candidate.length){
-        System.out.println(count++);
-        if (stu_length ==students_course_selected.length) break;
-        // 如果該名學生的志願序有寫滿
-        if (maxHeap.peek().preference.length == courses.length){
-          if (maxHeap.peek().preference[0]==i){
-            // 第一個志願的為
-            students_course_selected[stu_length] = maxHeap.remove();
-            stu_length++;
-          }else {
-            queue_not_my_preference.offer(maxHeap.remove());
-          }
-        }else if (maxHeap.peek().preference.length==i-1){
-          queue_all_fine.offer(maxHeap.remove());
-        }else queue_not_my_preference.offer(maxHeap.remove());
-      }
-  }*/
-
 
   // helper function
   // print result of allocating the student to course
