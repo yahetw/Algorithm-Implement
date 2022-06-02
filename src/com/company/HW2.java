@@ -134,7 +134,7 @@ public class HW2 {
       for (int j=1;j<= courses.length;j++){
 
         for (Student student:students_arrlist){
-          if (student.preference.length <=i){ //假如說我沒有填到這個志願序的話，放到stack裡面
+          if (student.preference.length <=i){ //假如說我沒有填滿志願序的話，放到stack裡面
             if (!stack.empty() && stack.peek().equals(student)) continue;
             stack.push(student);
           }else if(student.preference[i] == j){
