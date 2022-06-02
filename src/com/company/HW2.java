@@ -139,8 +139,6 @@ public class HW2 {
             stack.push(student);
           }else if(student.preference[i] == j){
             maxHeap.add(student);
-          }else {
-
           }
         }
         students_arrlist.removeAll(stack);  //將stack內的student，從剩餘學生清單移除
