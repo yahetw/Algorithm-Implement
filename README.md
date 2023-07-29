@@ -1,3 +1,2 @@
-# 1102_資訊科技研究
+# ITR_Infomation Technique Research
 
-## ITR_HW1_M104020052
